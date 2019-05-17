@@ -21,7 +21,7 @@ class ScorePage(BasePage):
                     "view": self._audio_score
                     }
         _content = self.find(_options[opt]).get_attribute('content-desc')
-        _score = re.search("\d", _content).group()
+        _score = re.search(r'\d', _content).group()
         _score = int(_score)
         return _score
 
