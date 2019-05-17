@@ -27,6 +27,8 @@ class StudyPage(BasePage):
         _list = article.find_elements_by_xpath('//*[contains(@text, ":")]')
         if _list:
             return _list[0].get_attribute('text')
+        else:
+            return
 
     @classmethod
     def is_article(cls, article: WebElement):

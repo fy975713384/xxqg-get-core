@@ -2,11 +2,22 @@
 import random
 import time
 from page.base_page import BasePage
+from page.page_choose_linkman import LinkManPage
+from utils.logger import logger
 
 
 class ArticlePage(BasePage):
     def __init__(self):
         self._share = (self.MB.ID, 'my_news_avatar')
+        self._share_xxqg = (self.MB.XPATH, '//*[contains(@text, "学习强国")]/..')
+
+    def tap_share(self):
+        self.find(self._share).click()
+
+    def share_to_xxqg(self):
+        self.tap_share()
+        self.find(self._share_xxqg).click()
+        return LinkManPage()
 
     @classmethod
     def simulate_read(cls, opt='read', time_: str = None):
@@ -22,3 +33,5 @@ class ArticlePage(BasePage):
                 time.sleep(47)
                 cls.swipe_up()
             time.sleep(_sec % 47)
+        else:
+            logger.critical('模拟阅读模式选项错误！')
