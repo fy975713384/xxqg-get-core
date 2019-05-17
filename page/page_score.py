@@ -16,12 +16,13 @@ class ScorePage(BasePage):
         self._audio_score = (self.MB.XPATH, '//*[@content-desc="视听学习"]/../*[starts-with(@content-desc,"已获")]')
         self._audio_study = (self.MB.XPATH, '//*[@content-desc="视听学习"]/../*[@content-desc="去看看"]')
 
-    def get_my_score(self, opt):
+    def get_my_score(self, opt) -> int:
         _options = {"read": self._read_score,
                     "view": self._audio_score
                     }
         _content = self.find(_options[opt]).get_attribute('content-desc')
         _score = re.search("\d", _content).group()
+        _score = int(_score)
         return _score
 
     def go_to_read(self):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
-
+import time
 from page.base_page import BasePage
 
 
@@ -9,15 +9,16 @@ class ArticlePage(BasePage):
         self._share = (self.MB.ID, 'my_news_avatar')
 
     @classmethod
-    def simulate_read(cls, opt='read'):
+    def simulate_read(cls, opt='read', time_: str = None):
         if opt == 'read':
-            _num = random.randint(23, 37)
+            _num = random.randint(23, 29)
             for _ in range(_num):
-                cls.swipe_up()
+                cls.swipe_up(_num * 47)
+                time.sleep(_num % 20)
         if opt == 'view':
-            # appium 60秒不操作则自动停止
-            for _ in range(2):
-                _sec = random.randint(30, 50)
-                import time
-                time.sleep(_sec)
+            _sec = int(time_.split(':')[0]) * 60 + int(time_.split(':')[1])
+            for _ in range(_sec // 47):
+                # 防止 Appium 等待 60s 强行停止
+                time.sleep(47)
                 cls.swipe_up()
+            time.sleep(_sec % 47)

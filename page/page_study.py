@@ -12,7 +12,7 @@ class StudyPage(BasePage):
         self._article_list = (self.MB.XPATH, '//android.widget.ListView/android.widget.FrameLayout')
 
     def get_article_list(self) -> list:
-        return self.find_all(self._article_list)
+        return self.find_all(self._article_list)[1:-1]
 
     def get_article_by_num(self, num) -> WebElement:
         return self.get_article_list()[num]
@@ -21,6 +21,12 @@ class StudyPage(BasePage):
     def tap_article(cls, article: WebElement):
         article.click()
         return ArticlePage()
+
+    @classmethod
+    def get_video_time(cls, article: WebElement):
+        _list = article.find_elements_by_xpath('//*[contains(@text, ":")]')
+        if _list:
+            return _list[0].get_attribute('text')
 
     @classmethod
     def is_article(cls, article: WebElement):
@@ -34,9 +40,9 @@ class StudyPage(BasePage):
 
     @classmethod
     def simulate_page_turning(cls):
-        _num = random.randint(7, 11)
+        _num = random.randint(3, 11)
         for _ in range(_num):
-            cls.swipe_up()
+            cls.swipe_up(300)
 
 
 '''

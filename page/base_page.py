@@ -44,7 +44,13 @@ class BasePage:
         return size['width'], size['height']
 
     @classmethod
-    def swipe(cls, dire: str):
+    def swipe(cls, dire: str, duration=None):
+        """
+        封装原生 swipe 方法，指定滑动方向和位置
+        :param dire: only `up` `down` `left` `right`
+        :param duration: (optional) time to take the swipe, in ms.
+        :return:
+        """
         x = cls.get_size()[0] / 2
         y = cls.get_size()[1] / 2
         if dire == 'up' or dire == 'down':
@@ -52,41 +58,41 @@ class BasePage:
             y1 = cls.get_size()[1] / 10 * 4
             if dire == 'down':
                 y0, y1 = y1, y0
-            BaseDriver.get_driver().swipe(x, y0, x, y1)
+            BaseDriver.get_driver().swipe(x, y0, x, y1, duration)
 
         elif dire == 'left' or dire == 'right':
             x0 = cls.get_size()[1] / 4 * 3
             x1 = cls.get_size()[1] / 4 * 1
             if dire == 'right':
                 x0, x1 = x1, x0
-            BaseDriver.get_driver().swipe(x0, y, x1, y)
+            BaseDriver.get_driver().swipe(x0, y, x1, y, duration)
         else:
             logger.error('滑动方向错误')
 
     @classmethod
-    def swipe_down(cls):
+    def swipe_down(cls, duration=None):
         """
         模拟手指向下滑动
         """
-        cls.swipe('down')
+        cls.swipe('down', duration)
 
     @classmethod
-    def swipe_up(cls):
+    def swipe_up(cls, duration=None):
         """
         模拟手指向上滑动
         """
-        cls.swipe('up')
+        cls.swipe('up', duration)
 
     @classmethod
-    def swipe_right(cls):
+    def swipe_right(cls, duration=None):
         """
         模拟手指向右滑动
         """
-        cls.swipe('right')
+        cls.swipe('right', duration)
 
     @classmethod
-    def swipe_left(cls):
+    def swipe_left(cls, duration=None):
         """
         模拟手指向左滑动
         """
-        cls.swipe('left')
+        cls.swipe('left', duration)
