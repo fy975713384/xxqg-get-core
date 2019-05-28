@@ -4,7 +4,7 @@ import pytest
 from page.page_main import MainPage
 
 
-@pytest.mark.flaky
+# @pytest.mark.flaky
 @pytest.mark.parametrize(
     "option", ['read', 'view']
 )
@@ -15,9 +15,11 @@ def test_get_rv_score(init_test, option):
     score = int(p_score.get_my_score(option))
     if score < 6:
         p_study = p_score.go_to_read() if option == 'read' else p_score.go_to_view()
+
         while score < 6:
             p_study.simulate_page_turning()
             article_list = p_study.get_article_list()
+
             if len(article_list) > 0:
                 for article in article_list:
                     # is_article() 会进行多态调用

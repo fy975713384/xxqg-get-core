@@ -28,23 +28,28 @@ class StudyPage(BasePage):
         if _list:
             return _list[0].get_attribute('text')
         else:
-            return
+            return None
 
     @classmethod
     def is_article(cls, article: WebElement):
         # 文章需要有日期
         _date = article.find_elements_by_xpath('//*[starts-with(@text,"2019-")]')
-        _flag = True if len(_date) > 0 else False
+        if len(_date) == 0: return False
         # 文章不应该有播放进度条
         _seek = article.find_elements_by_class_name('android.widget.SeekBar')
-        _flag = True if len(_seek) == 0 else False
-        return _flag
+        if len(_seek) != 0: return False
+        # 文章不包含专题两个字
+        _special = article.find_elements_by_xpath('//*[contains(@text, "专题")]')
+        if len(_special) != 0: return False
+        # TODO: 需要提升判断效率
+        return True
 
     @classmethod
     def simulate_page_turning(cls):
-        _num = random.randint(3, 11)
+        _num = random.randint(3, 5)
+        if _num < 5: cls.swipe_left()
         for _ in range(_num):
-            cls.swipe_up(300)
+            cls.swipe_up()
 
 
 '''

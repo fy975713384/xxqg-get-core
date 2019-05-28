@@ -61,8 +61,8 @@ class BasePage:
             BaseDriver.get_driver().swipe(x, y0, x, y1, duration)
 
         elif dire == 'left' or dire == 'right':
-            x0 = cls.get_size()[1] / 4 * 3
-            x1 = cls.get_size()[1] / 4 * 1
+            x0 = cls.get_size()[0] / 4 * 3
+            x1 = cls.get_size()[0] / 4 * 1
             if dire == 'right':
                 x0, x1 = x1, x0
             BaseDriver.get_driver().swipe(x0, y, x1, y, duration)
@@ -96,3 +96,8 @@ class BasePage:
         模拟手指向左滑动
         """
         cls.swipe('left', duration)
+
+    @classmethod
+    def get_toast(cls):
+        _toast = (cls.MB.CLASS_NAME, 'android.widget.Toast')
+        cls.find(_toast).get_attribute('text')
