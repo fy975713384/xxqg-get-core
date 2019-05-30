@@ -22,7 +22,7 @@ class MainPage(BasePage):
         self.find(self._ding).click()
         return
 
-    def switch_article(self):
+    def switch_study(self):
         self.find(self._article).click()
         return StudyPage()
 

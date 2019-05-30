@@ -10,6 +10,7 @@ from page.page_article import ArticlePage
 class StudyPage(BasePage):
     def __init__(self):
         self._article_list = (self.MB.XPATH, '//android.widget.ListView/android.widget.FrameLayout')
+        self._group_button = (self.MB.XPATH, '//*[@resource-id="view_pager"]/android.widget.FrameLayout')
 
     def get_article_list(self) -> list:
         return self.find_all(self._article_list)[1:-1]
@@ -30,14 +31,24 @@ class StudyPage(BasePage):
         else:
             return None
 
+    def open_group(self):
+        self.find(self._group_button).click()
+
+    @classmethod
+    def switch_section(cls, section: str):
+        pass
+
     @classmethod
     def is_article(cls, article: WebElement):
         # 文章需要有日期
         _date = article.find_elements_by_xpath('//*[starts-with(@text,"2019-")]')
         if len(_date) == 0: return False
-        # 文章不应该有播放进度条
-        _seek = article.find_elements_by_class_name('android.widget.SeekBar')
-        if len(_seek) != 0: return False
+        # 文章不应该有播放时间
+        _time = article.find_elements_by_xpath('//*[contains(@text, ":")]')
+        if len(_time) != 0: return False
+        # # 文章不应该有播放进度条
+        # _seek = article.find_elements_by_class_name('android.widget.SeekBar')
+        # if len(_seek) != 0: return False
         # 文章不包含专题两个字
         _special = article.find_elements_by_xpath('//*[contains(@text, "专题")]')
         if len(_special) != 0: return False
@@ -46,8 +57,7 @@ class StudyPage(BasePage):
 
     @classmethod
     def simulate_page_turning(cls):
-        _num = random.randint(3, 5)
-        if _num < 5: cls.swipe_left()
+        _num = random.randint(2, 5)
         for _ in range(_num):
             cls.swipe_up()
 
