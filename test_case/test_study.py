@@ -2,21 +2,19 @@
 import time
 from datetime import datetime
 
+import allure
+
 from page.page_main import MainPage
 
 
+@allure.step
 def test_study_case01(init_test):
     main = MainPage()
+    # 验证点击学习按钮显示学习页面
     p_study = main.switch_study()
-    p_study.swipe_up(600, 3)
-    for article in p_study.get_article_list():
-        # start_time = datetime.now()
-        # print(p_study.is_article(article))
-        # stop_time = datetime.now()
-        # print(stop_time - start_time)
-        p_article = p_study.tap_article(article)
-        time.sleep(3)
-        print(p_article.verify_page_visible())
-        p_article.go_back()
-        p_study.open_group()
-        time.sleep(3)
+    assert p_study.verify_page_visible()
+    # 验证可以切换到其它频道
+    l1 = p_study.get_article_list()
+    p_study.switch_channel('要闻')
+    l2 = p_study.get_article_list()
+    assert l1[0] != l2[0]

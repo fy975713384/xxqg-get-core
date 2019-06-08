@@ -1,41 +1,77 @@
 # -*- coding: utf-8 -*-
+import allure
 import pytest
 
+from page.page_article import ArticlePage
 from page.page_main import MainPage
+from page.page_score import ScorePage
+from page.page_study import StudyPage
 
 
-# @pytest.mark.flaky
-@pytest.mark.parametrize(
-    "option", ['read', 'view']
-)
-def test_get_rv_score(init_test, option):
-    main = MainPage()
-    p_score = main.switch_user().switch_score()
-    # 获取对应选项的当前得分
-    score = int(p_score.get_my_score(option))
+@pytest.mark.parametrize('opt', ['read', 'view'])
+def test_get_rv_score(init_test, opt):
+    open_score_page()
+    score = get_score_by_option(opt)
     if score < 6:
-        # 根据 option 选择进入对应页面
-        p_study = p_score.go_to_read() if option == 'read' else p_score.go_to_view()
-        # 开始模拟阅读或观看
+        p_opt = goto_opt_page_from_score_page(opt)
         while score < 6:
-            if option == 'read':
-                p_study.swipe_up()
-                p_study.swipe_left(600)
-            p_study.simulate_page_turning()
-            article_list = p_study.get_article_list()
-            if len(article_list) > 0:
-                for article in article_list:
-                    # is_article() 会进行多态调用
-                    if p_study.is_article(article):
-                        time_ = p_study.get_video_time(article)
-                        p_article = p_study.tap_article(article)
-                        p_article.simulate_read(option, time_)
-                        # 当得分为3时，分享一下
-                        if option == 'read' and score % 2 == 0:
-                            p_share = p_article.share_to_xxqg()
-                            p_share.choose_my_group()
-                            p_share.send_share_content()
-                        p_study.go_back()
-                        score += 1
-                        if score == 6:
-                            break
+            art_list = get_cur_art_list(p_opt)
+            for article in art_list:
+                if is_article(p_opt, article):
+                    simulate_read(p_opt, article, score)
+                    score += 1
+                    if score == 6:
+                        return
+            simulate_tp_after_loop(p_opt)
+
+
+@allure.step('打开得分页面')
+def open_score_page():
+    p_main = MainPage()
+    p_main.switch_user().switch_score()
+
+
+@allure.step('获取 <{opt}> 的得分')
+def get_score_by_option(opt) -> int:
+    p_score = ScorePage()
+    return p_score.get_my_score(opt)
+
+
+@allure.step('进入 <{opt}> 页面')
+def goto_opt_page_from_score_page(opt):
+    p_score = ScorePage()
+    p_opt = p_score.go_to_read() if opt == 'read' else p_score.go_to_av()
+    if opt == 'view': p_opt.switch_channel('短视频')
+    return p_opt
+
+
+@allure.step('获取 {p_opt} 页面文章列表')
+def get_cur_art_list(p_opt) -> list:
+    return p_opt.get_article_list()
+
+
+@allure.step('判断 {p_opt} 中的 {art} 是否符合条件')
+def is_article(p_opt, art) -> bool:
+    return p_opt.is_article(art)
+
+
+@allure.step('模拟阅读')
+def simulate_read(p_opt, article, score):
+    _time = p_opt.get_video_time(article)
+    p_art = p_opt.tap_article(article)
+    p_art.simulate_read(p_opt.sign, _time)
+    share_art(p_opt.sign, score)
+    p_opt.go_back()
+
+
+@allure.step('分享文章，如果 "{opt}"=="read" && "{score}"为偶数')
+def share_art(opt, score):
+    if opt == 'read' and score % 2 == 0:
+        p_share = ArticlePage().share_to_xxqg()
+        p_share.choose_my_group()
+        p_share.send_share_content()
+
+
+@allure.step('当结束一轮循环后翻页')
+def simulate_tp_after_loop(p_opt: StudyPage):
+    p_opt.simulate_page_turning()

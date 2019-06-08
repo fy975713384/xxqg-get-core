@@ -9,6 +9,7 @@ verify_ssl = true
 pytest = "*"
 appium-python-client = "*"
 flaky = "*"
+allure-pytest = "*"
 
 [requires]
 python_version = "3.7"

@@ -2,7 +2,7 @@
 from page.base_page import BasePage
 import re
 
-from page.page_video import VideoPage
+from page.page_av import AVPage
 from page.page_study import StudyPage
 
 
@@ -29,6 +29,6 @@ class ScorePage(BasePage):
         self.find(self._read_study).click()
         return StudyPage()
 
-    def go_to_view(self):
+    def go_to_av(self):
         self.find(self._audio_study).click()
-        return VideoPage()
+        return AVPage()

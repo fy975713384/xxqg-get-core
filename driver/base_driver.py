@@ -7,14 +7,19 @@ from utils.logger import logger
 
 class BaseDriver:
 
-    _driver = None
+    _driver: WebDriver = None
 
     @classmethod
     def get_driver(cls) -> WebDriver:
         return cls._driver
 
     @classmethod
-    def init_driver(cls):
+    def quit_driver(cls):
+        logger.info('测试完成，退出 driver！')
+        cls._driver.quit()
+
+    @classmethod
+    def init_driver(cls) -> WebDriver:
         logger.info('初始化 Android driver...')
         desired_caps = {
             "platformName": "Android",

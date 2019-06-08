@@ -2,6 +2,7 @@
 from page.base_page import BasePage
 import time
 
+
 class LinkManPage(BasePage):
     def __init__(self):
         self._my_study_group = (self.MB.ID, 'session_item')

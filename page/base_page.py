@@ -5,7 +5,7 @@ from appium.webdriver import WebElement
 from appium.webdriver.common.mobileby import MobileBy
 from selenium.common.exceptions import NoSuchElementException
 
-from dirver.base_driver import BaseDriver
+from driver.base_driver import BaseDriver
 from utils.logger import logger
 
 
@@ -80,34 +80,50 @@ class BasePage:
             logger.error('滑动方向错误')
 
     @classmethod
-    def swipe_down(cls, *args):
+    def swipe_down(cls, duration=None, num: int = 1):
         """
         模拟手指向下滑动
         """
-        cls.swipe('down', *args)
+        cls.swipe('down', duration, num)
 
     @classmethod
-    def swipe_up(cls, *args):
+    def swipe_up(cls, duration=None, num: int = 1):
         """
         模拟手指向上滑动
         """
-        cls.swipe('up', *args)
+        cls.swipe('up', duration, num)
 
     @classmethod
-    def swipe_right(cls, *args):
+    def swipe_right(cls, duration=None, num: int = 1):
         """
         模拟手指向右滑动
         """
-        cls.swipe('right', *args)
+        cls.swipe('right', duration, num)
 
     @classmethod
-    def swipe_left(cls, *args):
+    def swipe_left(cls, duration=None, num: int = 1):
         """
         模拟手指向左滑动
         """
-        cls.swipe('left', *args)
+        cls.swipe('left', duration, num)
 
     @classmethod
     def get_toast(cls):
         _toast = (cls.MB.CLASS_NAME, 'android.widget.Toast')
         cls.find(_toast).get_attribute('text')
+
+    @classmethod
+    def set_implicitly_wait(cls, time_to_wait):
+        BaseDriver.get_driver().implicitly_wait(time_to_wait)
+
+    # @staticmethod
+    # def set_implicitly_wait(time_to_wait):
+    #     def decorator(func):
+    #         def wrapper(*args, **kwargs):
+    #             BasePage.change_implicitly_wait(time_to_wait)
+    #             return func(*args, **kwargs)
+    #
+    #         BasePage.change_implicitly_wait(6)
+    #         return wrapper
+    #
+    #     return decorator
