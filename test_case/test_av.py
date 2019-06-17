@@ -6,6 +6,7 @@ def test_av_case01(init_test):
     main = MainPage()
     # 验证点击视听按钮显示视听页面
     p_av = main.switch_av()
+    print(p_av)
     assert p_av.verify_page_visible()
     # 验证可以切换到其它频道
     l1 = p_av.get_article_list()

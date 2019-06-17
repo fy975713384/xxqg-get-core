@@ -2,7 +2,7 @@
 
 from page.base_page import BasePage
 from page.page_av import AVPage
-from page.page_study import StudyPage
+from page.page_read import StudyPage
 from page.page_user import UserPage
 
 

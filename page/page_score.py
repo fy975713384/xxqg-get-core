@@ -2,8 +2,9 @@
 from page.base_page import BasePage
 import re
 
+from page.page_read import RDPage
 from page.page_av import AVPage
-from page.page_study import StudyPage
+from utils.logger import logger
 
 
 class ScorePage(BasePage):
@@ -27,8 +28,10 @@ class ScorePage(BasePage):
 
     def go_to_read(self):
         self.find(self._read_study).click()
-        return StudyPage()
+        logger.info('进入阅读学习页')
+        return RDPage()
 
     def go_to_av(self):
         self.find(self._audio_study).click()
+        logger.info('进入视听学习页')
         return AVPage()

@@ -45,5 +45,5 @@ class ArticlePage(BasePage):
             logger.info(f'获取播放时间：{time_}  开始播放视频：{_sec}s')
             for _ in range(_sec // 47):
                 # 防止 Appium 等待 60s 强行停止
-                time.sleep(30)
+                time.sleep(40)
                 cls.swipe_up()

@@ -11,24 +11,18 @@ from utils.logger import logger
 
 
 class StudyPage(BasePage):
-    def __init__(self):
-        self.sign = 'read'
-        self._channel_recommend = (self.MB.XPATH, '//*[@text="推荐"]')
-        self._channel_button = (self.MB.XPATH, '//*[@text="推荐"]/../../following-sibling::android.widget.FrameLayout')
-        self._article_list = (self.MB.XPATH, '//android.widget.ListView/android.widget.FrameLayout')
+    """
+    用来规避单例问题
+    """
 
-    def verify_page_visible(self):
-        return self.find(self._channel_recommend).is_displayed()
+    def __init__(self):
+        self._article_list = (self.MB.XPATH, '//android.widget.ListView/android.widget.FrameLayout')
 
     def get_article_list(self) -> list:
         return self.find_all(self._article_list)[1:-1]
 
     def get_article_by_num(self, num) -> WebElement:
         return self.get_article_list()[num]
-
-    def open_channel_group(self):
-        self.find(self._channel_button).click()
-        return ChannelPage()
 
     @classmethod
     def tap_article(cls, article: WebElement):
@@ -44,6 +38,35 @@ class StudyPage(BasePage):
             return _list[0].get_attribute('text')
         else:
             return None
+
+    @classmethod
+    def simulate_page_turning(cls):
+        _num = random.randint(2, 5)
+        for _ in range(_num):
+            cls.swipe_up()
+
+    @classmethod
+    def switch_channel(cls, channel: str):
+        _channel = (cls.MB.XPATH, f'//*[@text="{channel}"]/..')
+        try:
+            cls.find(_channel).click()
+        except NoSuchElementException:
+            logger.critical(f'该频道不存在，请检查：{channel}')
+
+
+class RDPage(StudyPage):
+    def __init__(self):
+        super(RDPage, self).__init__()
+        self.sign = 'read'
+        self._channel_recommend = (self.MB.XPATH, '//*[@text="推荐"]')
+        self._channel_button = (self.MB.XPATH, '//*[@text="推荐"]/../../following-sibling::android.widget.FrameLayout')
+
+    def verify_page_visible(self):
+        return self.find(self._channel_recommend).is_displayed()
+
+    def open_channel_group(self):
+        self.find(self._channel_button).click()
+        return ChannelPage()
 
     @classmethod
     def is_article(cls, article: WebElement):
@@ -69,20 +92,6 @@ class StudyPage(BasePage):
         # TODO: 需要更优雅地实现设置隐式等待时间
         cls.set_implicitly_wait(6)
         return True
-
-    @classmethod
-    def switch_channel(cls, channel: str):
-        _channel = (cls.MB.XPATH, f'//*[@text="{channel}"]/..')
-        try:
-            cls.find(_channel).click()
-        except NoSuchElementException:
-            logger.critical(f'该频道不存在，请检查：{channel}')
-
-    @classmethod
-    def simulate_page_turning(cls):
-        _num = random.randint(2, 5)
-        for _ in range(_num):
-            cls.swipe_up()
 
 
 '''

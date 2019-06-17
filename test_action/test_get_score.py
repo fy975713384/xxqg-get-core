@@ -5,7 +5,6 @@ import pytest
 from page.page_article import ArticlePage
 from page.page_main import MainPage
 from page.page_score import ScorePage
-from page.page_study import StudyPage
 
 
 @pytest.mark.parametrize('opt', ['read', 'view'])
@@ -40,9 +39,7 @@ def get_score_by_option(opt) -> int:
 @allure.step('进入 <{opt}> 页面')
 def goto_opt_page_from_score_page(opt):
     p_score = ScorePage()
-    p_opt = p_score.go_to_read() if opt == 'read' else p_score.go_to_av()
-    if opt == 'view': p_opt.switch_channel('短视频')
-    return p_opt
+    return p_score.go_to_read() if opt == 'read' else p_score.go_to_av()
 
 
 @allure.step('获取 {p_opt} 页面文章列表')
@@ -73,5 +70,5 @@ def share_art(opt, score):
 
 
 @allure.step('当结束一轮循环后翻页')
-def simulate_tp_after_loop(p_opt: StudyPage):
+def simulate_tp_after_loop(p_opt):
     p_opt.simulate_page_turning()

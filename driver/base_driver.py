@@ -32,6 +32,6 @@ class BaseDriver:
             "noReset": True
         }
         cls._driver = webdriver.Remote("http://localhost:4723/wd/hub", desired_caps)
-        cls._driver.implicitly_wait(6)
+        cls._driver.implicitly_wait(13)
         logger.info('driver 初始化完成！')
         return cls._driver
