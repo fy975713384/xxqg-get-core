@@ -39,3 +39,25 @@ class CC:
 def test(t):
     a = CC().go_to_ca() if t == 1 else CC().go_to_cb()
     print(a)
+
+
+def test_demo():
+    assert 0 == 1
+
+
+@pytest.fixture
+def make_customer_record():
+
+    def _make_customer_record(name):
+        return {
+            "name": name,
+            "orders": []
+        }
+
+    return _make_customer_record
+
+
+def test_customer_records(make_customer_record):
+    print(make_customer_record("Lisa"))
+    print(make_customer_record("Mike"))
+    print(make_customer_record("Meredith"))

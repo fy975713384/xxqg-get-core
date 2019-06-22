@@ -6,7 +6,6 @@ from utils.logger import logger
 
 
 class BaseDriver:
-
     _driver: WebDriver = None
 
     @classmethod
@@ -19,11 +18,12 @@ class BaseDriver:
         cls._driver.quit()
 
     @classmethod
-    def init_driver(cls) -> WebDriver:
+    def init_driver(cls, port, udid: str = None) -> WebDriver:
         logger.info('初始化 Android driver...')
         desired_caps = {
             "platformName": "Android",
             "deviceName": "Phone",
+            "udid": f"{udid}",
             "automationName": "UiAutomator2",
             "appPackage": "cn.xuexi.android",
             "appActivity": "com.alibaba.android.rimet.biz.SplashActivity",
@@ -31,7 +31,7 @@ class BaseDriver:
             "autoGrantPermissions": True,
             "noReset": True
         }
-        cls._driver = webdriver.Remote("http://localhost:4723/wd/hub", desired_caps)
+        cls._driver = webdriver.Remote(f"http://localhost:{port}/wd/hub", desired_caps)
         cls._driver.implicitly_wait(13)
         logger.info('driver 初始化完成！')
         return cls._driver
