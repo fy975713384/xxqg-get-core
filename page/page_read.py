@@ -41,7 +41,7 @@ class StudyPage(BasePage):
 
     @classmethod
     def simulate_page_turning(cls):
-        _num = random.randint(3, 7)
+        _num = random.randint(5, 7)
         for _ in range(_num):
             cls.swipe_up()
 
