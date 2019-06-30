@@ -109,4 +109,4 @@ venv.bak/
 .idea/
 
 # report
-report/
+.report/*

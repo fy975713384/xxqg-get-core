@@ -39,7 +39,15 @@ def get_score_by_option(opt) -> int:
 @allure.step('进入 <{opt}> 页面')
 def goto_opt_page_from_score_page(opt):
     p_score = ScorePage()
-    return p_score.go_to_read() if opt == 'read' else p_score.go_to_av()
+    if opt == 'read':
+        p_read = p_score.go_to_read()
+        p_read.switch_channel('要闻')
+        return p_read
+    elif opt == 'view':
+        p_view = p_score.go_to_av()
+        return p_view
+    else:
+        raise RuntimeError(f'选项错误：不存在 <{opt}> 选项')
 
 
 @allure.step('获取 {p_opt} 页面文章列表')

@@ -1,0 +1,4 @@
+device_0:
+  bp: '4900'
+  port: '4700'
+  udid: emulator-5554
