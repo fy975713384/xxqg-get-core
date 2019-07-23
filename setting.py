@@ -2,5 +2,5 @@
 
 
 class Setting:
-    PORT = None
-    UDID = None
+    PORT = 4723
+    UDID = 'emulator-5554'

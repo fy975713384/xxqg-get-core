@@ -54,7 +54,7 @@ class Command:
 
     @classmethod
     def start_appium(cls, port, bp, device):
-        command = f'{cls.START_APPIUM} -p {port} -bp {bp} -U {device} --session-override'
+        command = f'{cls.START_APPIUM} -p {port} -bp {bp} -U {device} --session-override --no-reset'
         logger.info(command)
         cls._exec_command(command)
 
